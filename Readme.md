@@ -1,5 +1,5 @@
 # Harmony Voice App
-This is a server - client type app used for voice and text chat.
+This is a server - client type app used for voice and text chat. It is written in python and it's using kivy as the framework for the GUI. The audio capture is handled by pyaudio.
 
 ## Interface
 

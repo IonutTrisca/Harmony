@@ -1,6 +1,14 @@
 # Harmony Voice App
 This is a server - client type app used for voice and text chat.
 
+## Interface
+
+### Login Screen
+![Login Screen](https://i.imgur.com/9fL1eZW.png)
+
+### Main Interface
+![Main Interface](https://i.imgur.com/5L1NWMr.png)
+
 ## Authors
 
 * **Ionut Trisca**

@@ -15,9 +15,6 @@ CHUNK = 512
 ENCODING = 'ascii'
 MESSAGELEN = 5
 
-IP = '89.42.178.154'
-PORT = 26030
-
 NO_MESSAGE = "null"
 
 class Client:
@@ -105,8 +102,6 @@ class Client:
                     break
             else:
                 time.sleep(0.2)
-        
-        # print("notr transmitting voice")
 
 
     def receive_voices(self):
@@ -133,7 +128,6 @@ class Client:
                                             output=True,
                                             frames_per_buffer=CHUNK)
                 self.audio_streams[client_id].write(data)
-        #print("not receiving voice")
 
     def send_message(self, message):
         message = f"{self.nickname}: " + message
@@ -150,7 +144,3 @@ class Client:
         self.send_voice_thread.join()
         self.recv_voice_thread.join()
         print("Threads joined")
-
-# if __name__ == "__main__":
-#     client = Client(IP, PORT)
-#     client.start()

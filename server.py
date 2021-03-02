@@ -12,9 +12,6 @@ CHUNK = 512
 ENCODING = 'ascii'
 MESSAGELEN = 5
 
-IP = '192.168.0.20'
-PORT = 26030
-
 NO_MESSAGE = "null"
 
 class ServerSideClient:
@@ -109,7 +106,7 @@ class Server:
             client_str['nick'] = new_client.nickname
             client_str['voice'] = new_client.voice_connected
 
-            self.tcp_broadcast(to_json(client_str, "USER_CONN"), client)
+            self.tcp_broadcast(to_json(client_str, "USER_CONN"))
 
             thread = threading.Thread(target=self.handle_client, args=(new_client,))
             thread.start()
@@ -128,22 +125,22 @@ class Server:
                 
                 if message['type'] == "VOICE_CONN":
                     client.voice_connected = True
-                    self.tcp_broadcast(to_json(client.id, "USER_VOICE_CONN"), client)
+                    self.tcp_broadcast(to_json(client.id, "USER_VOICE_CONN"))
                     continue
 
                 if message['type'] == "VOICE_DISC":
                     client.voice_connected = False
-                    self.tcp_broadcast(to_json(client.id, "USER_VOICE_DISC"), client)
+                    self.tcp_broadcast(to_json(client.id, "USER_VOICE_DISC"))
                     continue
                 
                 if message['type'] == "MSG":
-                    self.tcp_broadcast(json.dumps(message), client)
+                    self.tcp_broadcast(json.dumps(message))
 
             except socket.error:
                 self.clients.remove(client)
                 client.connection.close()
-                self.tcp_broadcast(to_json(client.id, "USER_VOICE_DISC"), client)
-                self.tcp_broadcast(to_json(client.id, "USER_DISC"), client)
+                self.tcp_broadcast(to_json(client.id, "USER_VOICE_DISC"))
+                self.tcp_broadcast(to_json(client.id, "USER_DISC"))
                 print(f'{client.nickname} left due to socket closure!')
                 break
 
@@ -172,7 +169,7 @@ class Server:
                 print("UDP socket closed")
                 break
 
-    def tcp_broadcast(self, message, sending_client):
+    def tcp_broadcast(self, message):
         for client in self.clients:
             self.send_data(message, client.connection)
     
@@ -210,6 +207,11 @@ class Server:
 
 
 if __name__ == "__main__":
+    print("If the server is behind a NAT you will have to use port forwarding for internet connections.\n")
+
+    IP = input("Please enter the local IP of the host: ")
+    PORT = int(input("Please enter a port for the server: "))
+
     server = Server(IP, PORT)
     print("Server is listening for connections...")
     server.start()

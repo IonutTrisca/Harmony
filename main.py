@@ -9,13 +9,11 @@ from utils import *
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.config import Config
-from kivy.uix.label import Label
 from kivy.uix.popup import Popup
-from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.screenmanager import FadeTransition, RiseInTransition, Screen, ScreenManager
+from kivy.uix.screenmanager import Screen, ScreenManager
 
 from client import Client
 
@@ -53,8 +51,6 @@ class LoginWindow(Screen):
     
     def on_pre_enter(self):
         Window.size = (1280, 720)
-        self.ip.text = "losi.tk"
-        self.nick.text = "John"
 
     def connect(self):
         if message_recv_thread is not None:
@@ -177,7 +173,6 @@ class MainWindow(Screen):
                     break
 
             if recv_message['type'] == MSG:
-                # TODO update message showing mode
                 cli.received_msg += recv_message['body'] + "\n"
                 self.recv_messages.text = cli.received_msg
                 continue

@@ -268,8 +268,11 @@ if __name__ == '__main__':
         except:
             print("No connection to the server")
         
-        cli.tcp_socket.close()
-        cli.udp_socket.close()
-        cli.join_threads()
-        message_recv_thread.join()
+        if cli.connected:
+            cli.tcp_socket.close()
+            cli.udp_socket.close()
+            cli.join_threads()
+        
+        if message_recv_thread is not None:
+            message_recv_thread.join()
     

@@ -140,7 +140,6 @@ class Client:
         self.send_data(to_json(message, "MSG"))
 
     def start(self):
-
         self.send_voice_thread = threading.Thread(target=self.transmit_voice)
         self.send_voice_thread.start()
 

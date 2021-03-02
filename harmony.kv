@@ -2,7 +2,7 @@
 
 <VoiceConnectedClient>:
     client_name: client_name
-    client_image: client_image
+    client_AsyncImage: client_AsyncImage
     size_hint: 1, None
     size: 20, 50
 
@@ -12,15 +12,15 @@
         pos_hint: {"x":root.height / root.width, "y":0}
         text: "new user"
 
-    Image:
-        id: client_image
+    AsyncImage:
+        id: client_AsyncImage
         source: 'user.png'
         size_hint: root.height / root.width, 1
         pos_hint: {"x":0.1, "y":0}
 
 <ConnectedClient>:
     client_name: client_name
-    client_image: client_image
+    client_AsyncImage: client_AsyncImage
     size_hint: 1, None
     size: 20, 50
 
@@ -30,8 +30,8 @@
         pos_hint: {"x":root.height / root.width, "y":0}
         text: "new user"
 
-    Image:
-        id: client_image
+    AsyncImage:
+        id: client_AsyncImage
         source: 'user.png'
         size_hint: root.height / root.width, 1
         pos_hint: {"x":0.1, "y":0}
@@ -64,7 +64,7 @@
     FloatLayout:
         size: root.width, root.height
 
-        Image:
+        AsyncImage:
             source: 'harmony_logo.png'
             size_hint: 0.2, 0.1
             pos_hint: {"x":0.4, "y":0.73}
@@ -157,7 +157,7 @@
                     size_hint: 0.4, 0.4
                     pos_hint: {"x":0.5, "y":0.15}
 
-                Image:
+                AsyncImage:
                     source: 'user.png'
                     size_hint: root.height / 2.1 / root.width, 1
                     pos_hint: {"x":0.05, "y":0.5}
@@ -171,7 +171,7 @@
         FloatLayout:
             size_hint: 0.6, 1
 
-            Image:
+            AsyncImage:
                 source: 'harmony_logo.png'
                 size_hint: 1, 0.07
                 pos_hint: {"x":0, "y":0.91}
@@ -183,6 +183,7 @@
                 disabled: True
                 background_color: [0.2, 0.2, 0.2, 1]
                 foreground_color: [1, 1, 1, 1]
+                disabled_foreground_color: [1, 1, 1, 1]
                 font_size: root.height / 40
 
             TextInput:

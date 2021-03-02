@@ -1,0 +1,224 @@
+#:kivy 2.0.0
+
+<VoiceConnectedClient>:
+    client_name: client_name
+    client_image: client_image
+    size_hint: 1, None
+    size: 20, 50
+
+    Label:
+        id: client_name
+        size_hint: 1,1
+        pos_hint: {"x":root.height / root.width, "y":0}
+        text: "new user"
+
+    Image:
+        id: client_image
+        source: 'user.png'
+        size_hint: root.height / root.width, 1
+        pos_hint: {"x":0.1, "y":0}
+
+<ConnectedClient>:
+    client_name: client_name
+    client_image: client_image
+    size_hint: 1, None
+    size: 20, 50
+
+    Label:
+        id: client_name
+        size_hint: 1,1
+        pos_hint: {"x":root.height / root.width, "y":0}
+        text: "new user"
+
+    Image:
+        id: client_image
+        source: 'user.png'
+        size_hint: root.height / root.width, 1
+        pos_hint: {"x":0.1, "y":0}
+
+
+<PopUpWindow>:
+    window_text: window_text
+    Label:
+        id: window_text
+        text: "Wrong port, IP \n or server is not available."
+        halign: 'center'
+        size_hint: 1, 0.8
+        font_size: root.height / 6
+        pos_hint: {"x":0, "y":0.1}
+
+<NicknamePopUp>:
+    Label:
+        text: "You need to enter a nickname"
+        size_hint: 1, 0.8
+        font_size: root.height / 6
+        pos_hint: {"x":0, "y":0.1}
+
+
+<LoginWindow>:
+    name: "login"
+
+    ip: ip
+    nick: nick
+
+    FloatLayout:
+        size: root.width, root.height
+
+        Image:
+            source: 'harmony_logo.png'
+            size_hint: 0.2, 0.1
+            pos_hint: {"x":0.4, "y":0.73}
+
+        Label:
+            text: "Your nickname"
+            size_hint: 0.3, 0.1
+            pos_hint: {"x":0.35, "y":0.58}
+            font_size: root.height / 40
+
+        TextInput:
+            id: nick
+            multiline: False
+            write_tab: False
+            size_hint: 0.3, 0.06
+            pos_hint: {"x":0.35, "y":0.54}
+            font_size: root.height / 35
+            padding: [10, 10, 0, 0]
+
+        Label:
+            text: "Server address and port (IP:PORT)"
+            size_hint: 0.25, 0.1
+            pos_hint: {"x":0.375, "y":0.43}
+            font_size: root.height / 40
+
+        TextInput:
+            id: ip
+            multiline: False
+            write_tab: False
+            on_text_validate: root.connect()
+            size_hint: 0.3, 0.06
+            pos_hint: {"x":0.35, "y":0.39}
+            font_size: root.height / 35
+            padding: [10, 10, 0, 0]
+
+        Button:
+            text: "Connect"
+            on_press: root.connect()
+            size_hint: 0.1, 0.06
+            pos_hint: {"x":0.45, "y":0.28}
+            font_size: root.height / 40
+
+
+<MainWindow>:
+    name: "main"
+    recv_messages: recv_messages
+    send_mesg: send_mesg
+    online_voice_clients_widgets: online_voice_clients
+    connect_voice: connect_voice
+    mute_client: mute_client
+    user_name: user_name
+    online_clients_widgets: online_clients
+
+    GridLayout:
+        cols: 3
+
+        GridLayout:
+            cols: 1
+            orientation: 'tb-lr'
+            size_hint: 0.2, 1
+
+            Label:
+                text: "Voice Connections"
+                size_hint: 1, 0.15
+
+            ScrollView:
+                size_hint: 1, 1
+
+                GridLayout:
+                    size_hint_y: None  # required since we are setting height
+                    height: self.minimum_height
+                    id: online_voice_clients
+                    cols: 1
+
+            FloatLayout:
+                size_hint: 1, 0.2
+
+                Button:
+                    id: connect_voice
+                    text: "Connect Voice"
+                    on_press: root.connect_voice_channel()
+                    size_hint: 0.4, 0.4
+                    pos_hint: {"x":0.05, "y":0.15}
+                    font_size: root.height / 57
+
+                Button:
+                    id: mute_client
+                    text: "Mute"
+                    on_press: root.mute()
+                    size_hint: 0.4, 0.4
+                    pos_hint: {"x":0.5, "y":0.15}
+
+                Image:
+                    source: 'user.png'
+                    size_hint: root.height / 2.1 / root.width, 1
+                    pos_hint: {"x":0.05, "y":0.5}
+
+                Label:
+                    id: user_name
+                    text: "User"
+                    pos_hint: {"x":0.2, "y":0.5}
+
+
+        FloatLayout:
+            size_hint: 0.6, 1
+
+            Image:
+                source: 'harmony_logo.png'
+                size_hint: 1, 0.07
+                pos_hint: {"x":0, "y":0.91}
+
+            TextInput:
+                id: recv_messages
+                size_hint: 1, 0.8
+                pos_hint: {"x":0, "y":0.1}
+                disabled: False
+                background_color: [0.2, 0.2, 0.2, 1]
+                foreground_color: [1, 1, 1, 1]
+                font_size: root.height / 40
+
+            TextInput:
+                id: send_mesg
+                multiline: False
+                on_text_validate: root.send_message()
+                size_hint: 0.9, 0.05
+                pos_hint: {"x":0, "y":0.03}
+                text_validate_unfocus: False
+                font_size: root.height / 40
+                padding: [10, 7, 0, 0]
+
+            Button:
+                text: "Send"
+                on_press: root.send_message()
+                size_hint: 0.1, 0.05
+                pos_hint: {"x":0.9, "y":0.03}
+
+        FloatLayout:
+            size_hint: 0.2, 1
+
+            GridLayout:
+                cols: 1
+                size_hint: 1, 1
+                pos_hint: {"x":0, "y":0}
+
+                Label:
+                    size_hint: 1, 0.1
+                    text: "Online People"
+
+
+                ScrollView:
+                    size_hint: 1, 0.9
+
+                    GridLayout:
+                        size_hint_y: None  # required since we are setting height
+                        height: self.minimum_height
+                        id: online_clients
+                        cols: 1

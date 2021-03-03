@@ -1,5 +1,5 @@
 # Harmony Voice App
-This is a server - client type app used for voice and text chat. It is written in python3 and it's using kivy as the framework for the GUI. The audio capture is handled by pyaudio.
+This is a server - client type app used for voice and text chat. It is written in **python3** and it's using **kivy** as the framework for the GUI. The audio capture is handled by **pyaudio**.
 
 ## Requirements
 Running `pip install -r requirements.txt` will install the necessary libraries. If that fails you can install **kivy** and **pyaudio** directly from pip.

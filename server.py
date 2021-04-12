@@ -180,15 +180,12 @@ class Server:
                     self.udp_socket.sendto(bytes(message), client.udp_address)
 
     def get_commands(self):
-        command = input("")
-        if command == "exit":
-            for client in self.clients:
-                client.connection.close()
-
-            self.tcp_socket.close()
-            self.udp_socket.close()
-            
-            exit()
+        while True:
+            command = input("")
+            if command == "exit":
+                for client in self.clients:
+                    client.connection.close()                
+                break
 
     def start(self):
         tcp_conn_thread = threading.Thread(target=self.accept_new_connections, daemon=True)
@@ -201,7 +198,6 @@ class Server:
 
         command_thread = threading.Thread(target=self.get_commands)
         command_thread.start()
-
 
 
 

@@ -113,7 +113,6 @@ class Server:
 
     
     def tcp_conn_check(self, client):
-        
         self.send_data(to_json(NO_MESSAGE, "KEEP_ALIVE"), client.connection)
         time.sleep(0.5)
 
@@ -192,11 +191,11 @@ class Server:
             exit()
 
     def start(self):
-        tcp_conn_thread = threading.Thread(target=self.accept_new_connections)
+        tcp_conn_thread = threading.Thread(target=self.accept_new_connections, daemon=True)
         tcp_conn_thread.start()
         print("TCP Thread Active.")
 
-        udp_voice_thread = threading.Thread(target=self.handle_voice_data)
+        udp_voice_thread = threading.Thread(target=self.handle_voice_data, daemon=True)
         udp_voice_thread.start()
         print("UDP Thread Active.")
 
@@ -211,7 +210,8 @@ if __name__ == "__main__":
 
     IP = input("Please enter the local IP of the host: ")
     PORT = int(input("Please enter a port for the server: "))
-
+    # IP = '192.168.0.20'
+    # PORT = 26030
     server = Server(IP, PORT)
     print("Server is listening for connections...")
     server.start()

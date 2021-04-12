@@ -10,8 +10,8 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.config import Config
 from kivy.uix.popup import Popup
-from kivy.properties import ObjectProperty
 from kivy.core.window import Window
+from kivy.properties import ObjectProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
 
@@ -53,9 +53,6 @@ class LoginWindow(Screen):
         Window.size = (1280, 720)
 
     def connect(self):
-        if message_recv_thread is not None:
-            message_recv_thread.join()
-
         global cli
 
         ip_port = self.ip.text.split(":")
@@ -135,7 +132,7 @@ class MainWindow(Screen):
         self.user_name.text = cli.nickname
 
         global message_recv_thread
-        message_recv_thread = Thread(target=self.recv_msg)
+        message_recv_thread = Thread(target=self.recv_msg, daemon=True)
         message_recv_thread.start()
 
     def connect_voice_channel(self):
@@ -157,12 +154,11 @@ class MainWindow(Screen):
 
     def recv_msg(self):
         global cli
-        while not cli.shutdown:
+        while True:
             try:
                 recv_message = json.loads(cli.recv_data())
             except socket.error:
                 print("Error while receiving data")
-                cli.shutdown = True
                 
                 if App.get_running_app() is not None:
                     show = PopUpWindow()
@@ -233,7 +229,6 @@ class MainWindow(Screen):
         wm.add_widget(MainWindow(name="main"))
         cli.tcp_socket.close()
         cli.udp_socket.close()
-        cli.join_threads()
 
 
 class WindowManager(ScreenManager):
@@ -255,19 +250,4 @@ class HarmonyVoiceApp(App):
 
 if __name__ == '__main__':
     HarmonyVoiceApp().run()
-    
-    if cli is not None:
-        cli.shutdown = True
-        try:
-            cli.send_data(to_json(NO_MESSAGE, "SD"))
-        except:
-            print("No connection to the server")
-        
-        if cli.connected:
-            cli.tcp_socket.close()
-            cli.udp_socket.close()
-            cli.join_threads()
-        
-        if message_recv_thread is not None:
-            message_recv_thread.join()
     

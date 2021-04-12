@@ -32,7 +32,6 @@ class Client:
         self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.nickname = ""
         self.received_msg = ""
-        self.shutdown = False
         self.voice_connected = False
         self.muted = False
         self.connected_clients = []
@@ -89,7 +88,7 @@ class Client:
 
 
     def transmit_voice(self):
-        while not self.shutdown:
+        while True:
             if self.voice_connected and not self.muted:
                 data = self.input_stream.read(CHUNK)
                 message = bytearray(self.id.encode(ENCODING))
@@ -105,7 +104,7 @@ class Client:
 
 
     def receive_voices(self):
-        while not self.shutdown:
+        while True:
             try:
                 message, _ = self.udp_socket.recvfrom(CHUNK * 2 + ID_LENGTH)
             except socket.error:
@@ -134,13 +133,8 @@ class Client:
         self.send_data(to_json(message, "MSG"))
 
     def start(self):
-        self.send_voice_thread = threading.Thread(target=self.transmit_voice)
+        self.send_voice_thread = threading.Thread(target=self.transmit_voice, daemon=True)
         self.send_voice_thread.start()
 
-        self.recv_voice_thread = threading.Thread(target=self.receive_voices)
+        self.recv_voice_thread = threading.Thread(target=self.receive_voices, daemon=True)
         self.recv_voice_thread.start()
-    
-    def join_threads(self):
-        self.send_voice_thread.join()
-        self.recv_voice_thread.join()
-        print("Threads joined")
